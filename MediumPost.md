@@ -527,4 +527,5 @@ Thank you.
 ## 👤 Author
 
 **Eric Gamor**
-Terraform | AWS | Cloud Automation
+
+Cloud & DevOps Engineer | Terraform | AWS | Cloud Automation | AI/ML
