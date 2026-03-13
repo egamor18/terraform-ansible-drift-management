@@ -1,0 +1,33 @@
+# inventory/aws_ec2.yml
+# Basic AWS EC2 dynamic inventory configuration
+plugin: amazon.aws.aws_ec2
+regions:
+  - eu-central-1
+
+# discover instance with this attributes or tags
+filters:
+  instance-state-name: running
+  #tag:env: prod
+  #filter by instance-type
+  #instance-type: t2.micro
+
+#Which AWS metadata field should be used as the inventory hostname
+# without the hostname config, the default which is the dns name is used
+#hostnames:
+  #- instance-id
+  #- dns-name
+  #- private-dns-name
+  #- public-ip-address
+  #- private-ip-address
+
+
+#group the instance by:
+keyed_groups:
+  - key: tags.Role
+    prefix: role
+
+#compose:
+#  ansible_host: public_dns_name
+
+compose:
+  ec2_public_dns: public_dns_name

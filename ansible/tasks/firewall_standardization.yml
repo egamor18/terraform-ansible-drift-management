@@ -1,0 +1,26 @@
+#---------------------------------------------------
+# firewall standardization
+#---------------------------------------------------
+- name: Install firewalld
+  package:
+    name: firewalld
+    state: present
+
+- name: Start firewall
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: Allow HTTP
+  firewalld:
+    port: 80/tcp
+    permanent: yes
+    state: enabled
+
+- name: Start firewall
+  service:
+    name: firewalld
+    state: restarted
+    enabled: yes
+

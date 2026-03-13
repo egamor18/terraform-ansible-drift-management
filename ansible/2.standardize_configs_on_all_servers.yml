@@ -1,0 +1,38 @@
+- name: standardization of configs on servers
+  hosts: role_webserver
+  serial: 1
+  become: yes
+
+  #assign the values to the variables
+  vars:
+    site_name: Tech with Gamors
+  # Check your target system with the cli command
+  #'which python3.9' to get the correct path
+    ansible_python_interpreter: /usr/bin/python3.9 
+  
+  tasks:
+
+#---------------------------------------------------
+# nginx version standardization
+#---------------------------------------------------
+    - name: Install nginx
+      include_tasks: tasks/nginx_standardization.yml
+
+#---------------------------------------------------
+# firewall standardization
+#---------------------------------------------------
+    - name: firewall standardization
+      script: ./scripts/firewalld_standardization.sh 
+
+#---------------------------------------------------
+# SSH standardization
+#---------------------------------------------------
+    - name: ssh standardization
+      include_tasks: tasks/ssh_hardening.yml
+
+
+  handlers:
+    - name: restart ssh
+      service:
+        name: sshd
+        state: restarted  

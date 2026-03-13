@@ -1,0 +1,14 @@
+- name: Enforce SSH hardening
+  copy:
+    dest: /etc/ssh/sshd_config.d/10-hardening.conf
+    content: |
+      # Managed by Ansible - SSH Hardening
+        PasswordAuthentication no
+        PermitRootLogin no
+        PubkeyAuthentication yes
+        Port 22
+
+        MaxAuthTries 3
+        ClientAliveInterval 300
+        ClientAliveCountMax 2
+  notify: restart ssh 

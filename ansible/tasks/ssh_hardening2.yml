@@ -1,0 +1,22 @@
+
+- name: Deploy SSH hardening configuration
+    copy:
+      dest: /etc/ssh/sshd_config.d/10-security-hardening.conf
+      owner: root
+      group: root
+      mode: '0644'
+      content: |
+      # Managed by Ansible - SSH Hardening
+        PasswordAuthentication no
+        PermitRootLogin no
+        PubkeyAuthentication yes
+        Port 22
+
+        MaxAuthTries 3
+        ClientAliveInterval 300
+        ClientAliveCountMax 2
+  
+- name: restart sshd
+  service:
+    name: sshd
+    state: restarted

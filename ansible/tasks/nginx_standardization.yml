@@ -1,0 +1,31 @@
+#---------------------------------------------------
+# nginx version standardization
+#---------------------------------------------------
+- name: Install nginx
+  package:
+    name: nginx-1.28*
+    state: present
+    update_cache: yes
+
+# lets get the nginx version
+- name: get current ngix version
+  command: nginx -v
+  register: nginx_version_out
+  ignore_errors: yes
+
+#seting the output as a fact
+- name: Save nginx version as a fact
+  set_fact:
+    nginx_version: "{{nginx_version_out.stderr}}"
+
+    #here we template our index.html
+- name: Deploy nginx site config
+  template:
+    src: index.html.j2
+    #dest: /var/www/html/index.html #the webdirectory for ubuntu
+    dest: /usr/share/nginx/html/index.html     #for amazonlinux2023
+
+- name: Restart nginx
+  service:
+    name: nginx
+    state: restarted

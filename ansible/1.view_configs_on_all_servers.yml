@@ -1,0 +1,67 @@
+- name: Rolling update of webservers
+  hosts: role_webserver
+  serial: 1
+  become: yes
+
+  tasks:
+#---------------------------------------------------
+# nginx version
+#---------------------------------------------------
+  
+    # Check if the Nginx binary even exists
+    - name: Check if Nginx binary exists
+      stat:
+        path: /usr/sbin/nginx
+      register: nginx_binary
+
+
+      # lets get the nginx version
+    - name: nginx version 
+      command: nginx -v
+      register: nginx_version_out
+      when: nginx_binary.stat.exists
+      changed_when: false
+      #ignore_errors: yes
+      no_log: yes
+
+# 3. Handle the output gracefully
+    - name: Report Nginx status
+      debug:
+        msg: >
+          {% if nginx_binary.stat.exists %}
+          {{ nginx_version_out.stderr }}
+          {% else %}
+          Nginx is NOT INSTALLED on this host. SKIPPING VERSION CHECK
+          {% endif %}
+
+#---------------------------------------------------
+# view sshd config
+#---------------------------------------------------
+    - name: sshd config view
+      shell: |
+        sshd -T | grep -iE "permitrootlogin|passwordauthentication|pubkeyauthentication|port"
+      register: sshd_output
+      no_log: yes
+
+    - name: sshd config formatted
+      debug:
+        var: sshd_output.stdout_lines
+
+
+#---------------------------------------------------
+# view firewall config
+#---------------------------------------------------
+    - name: firewalld config view
+      script: ./scripts/firewalld_config_view.sh
+      register: firewalld_output
+      no_log: yes
+
+    - name: firewalld formatted
+      debug:
+        var: firewalld_output.stdout_lines
+      
+    
+   
+
+  
+  

@@ -1,0 +1,31 @@
+#!/bin/bash
+set -xe
+
+dnf update -y
+dnf install -y nginx
+systemctl enable nginx
+systemctl start nginx
+dnf install stress -y
+
+
+# Install firewalld
+dnf install -y firewalld
+
+# Start and enable the service
+systemctl enable --now firewalld
+
+# 3. Open Ports
+# Port 22 (SSH) explicit opening
+firewall-cmd --permanent --add-service=ssh
+firewall-cmd --permanent --add-service=http
+firewall-cmd --permanent --add-service=https
+
+# Alternatively, using port numbers:
+# firewall-cmd --permanent --add-port=22/tcp
+# firewall-cmd --permanent --add-port=80/tcp
+# firewall-cmd --permanent --add-port=443/tcp
+
+
+# Reload to apply changes
+firewall-cmd --reload
+
