@@ -229,8 +229,7 @@ terraform-ansible-drift-management/
 │   │
 │   └── ReadMe.md
 │
-├── project_report2.md
-├── step_by_step_execution.md
+├── MediumPost.md
 ├── Readme.md
 
 ```
