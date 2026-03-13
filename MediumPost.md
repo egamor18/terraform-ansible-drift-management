@@ -278,7 +278,7 @@ Separating these layers improves modularity and mirrors real-world infrastructur
 First git clone the repository.
 
 ```bash
-git clone 
+git clone https://github.com/egamor18/terraform-ansible-drift-management.git 
 ```
 
 Navigate to the foundation infrastructure directory:
